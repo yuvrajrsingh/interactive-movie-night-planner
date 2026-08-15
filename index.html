@@ -1,0 +1,204 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Night Planner</title>
+  <link rel="icon" type="image/png" href="./public/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a href="#" class="logo">
+        <span class="logo-icon">🎬</span>
+        Movie<span>Night</span>
+      </a>
+
+      <div class="watchlist-indicator">
+        <span>♥</span>
+        Watchlist
+        <strong id="watchlist-count">0</strong>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL MOVIE PLANNER</p>
+          <h1>Find something<br><span>great to watch.</span></h1>
+          <p class="hero-description">
+            Search, filter, save, and discover your next movie night
+            without the endless scrolling.
+          </p>
+        </div>
+
+        <button class="random-btn" id="random-movie">
+          <span>✦</span>
+          Surprise Me
+        </button>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls-section">
+      <div class="container">
+        <div class="search-row">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="search" placeholder="Search movies by title...">
+            <button id="search-btn" type="button">Search</button>
+          </div>
+
+          <button class="clear-btn" id="clear-filters">
+            Clear filters
+          </button>
+        </div>
+
+        <div class="filters">
+          <div class="filter-group">
+            <label for="genre">Genre</label>
+            <select id="genre">
+              <option value="all">All genres</option>
+              <option value="action">Action</option>
+              <option value="adventure">Adventure</option>
+              <option value="science fiction">Science Fiction</option>
+              <option value="horror">Horror</option>
+              <option value="drama">Drama</option>
+              <option value="animation">Animation</option>
+              <option value="comedy">Comedy</option>
+              <option value="family">Family</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="mystery">Mystery</option>
+              <option value="thriller">Thriller</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="rating">Minimum rating</label>
+            <select id="rating">
+              <option value="0">Any rating</option>
+              <option value="7">7.0+</option>
+              <option value="8">8.0+</option>
+              <option value="9">9.0+</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="sort">Sort by</label>
+            <select id="sort">
+              <option value="rating">Highest rated</option>
+              <option value="year">Newest</option>
+              <option value="title">Title A–Z</option>
+            </select>
+          </div>
+
+          <div class="filter-group watched-filter">
+            <label for="watched">Show</label>
+            <select id="watched">
+              <option value="all">All movies</option>
+              <option value="unwatched">Unwatched</option>
+              <option value="watched">Watched</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Movies -->
+    <section class="movies-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">MOVIE COLLECTION</p>
+            <h2>All Movies</h2>
+          </div>
+
+          <p class="movie-count">
+            <strong id="movie-count">20</strong> movies
+          </p>
+        </div>
+
+        <!-- Loading state -->
+        <div class="loading-state" id="loading">
+          <div class="spinner"></div>
+          <p>Finding movies...</p>
+        </div>
+
+        <!-- Error state -->
+        <div class="error-state hidden" id="error">
+          <span>⚠</span>
+          <h3>Something went wrong</h3>
+          <p>We couldn't load the movies. Please try again.</p>
+          <button id="retry">Try again</button>
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-state hidden" id="empty">
+          <span>🔎</span>
+          <h3>No movies found</h3>
+          <p>Try changing your search or filters.</p>
+        </div>
+
+        <!-- Movie cards -->
+        <div class="movie-grid" id="movie-grid">
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Movie detail modal -->
+  <div class="modal hidden" id="movie-modal">
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close">×</button>
+
+      <div class="modal-poster">
+        <img id="modal-image" src="" alt="">
+      </div>
+
+      <div class="modal-info">
+        <div class="movie-meta">
+          <span id="modal-year">2024</span>
+          <span>•</span>
+          <span id="modal-runtime">2h 18m</span>
+        </div>
+
+        <h2 id="modal-title">Movie title</h2>
+
+        <div class="modal-rating">
+          ★ <strong id="modal-rating">8.8</strong>
+        </div>
+
+        <div class="genres" id="modal-genres"></div>
+
+        <p id="modal-description">
+          Movie description will appear here.
+        </p>
+
+        <button class="primary-btn" id="modal-watchlist">
+          + Add to watchlist
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-content">
+      <p>MovieNight Planner</p>
+      <span>Built with HTML, CSS & JavaScript</span>
+    </div>
+  </footer>
+
+  <script src="script.js" type="module"></script>
+</body>
+
+</html>
