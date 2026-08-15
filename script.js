@@ -110,20 +110,14 @@ let ratingFilterValue = "0";
 const resultsValue = movieGrid.children;
 
 function filtered(gFilter, rFilter, rValues) {
-    if (gFilter === "all" && rFilter === "0") {
-        for (let rValue of rValues) {
-            rValue.style.display = "";
-        }
-    } else {
-        for (let rValue of rValues) {
-            const gValueFilter = rValue.children[1].querySelector(".genres").textContent.toLowerCase();
-            const rValueFilter = rValue.children[0].querySelector(".rating").textContent.slice(2);
-            if (gValueFilter.indexOf(gFilter) > -1 && Number(rValueFilter) >= Number(rFilter)) {
-                rValue.style.display = "";
-            } else {
-                rValue.style.display = "none";
-            }
-        }
+    for (let rValue of rValues) {
+        const gValueFilter = rValue.children[1].querySelector(".genres").textContent.toLowerCase();
+        const rValueFilter = rValue.children[0].querySelector(".rating").textContent.slice(2);
+
+        const genreValueFilter = gFilter === "all" || gValueFilter.includes(gFilter);
+        const ratingValueFilter = rFilter === "0" || Number(rValueFilter) >= Number(rFilter);
+
+        rValue.style.display = genreValueFilter && ratingValueFilter ? "" : "none";
     }
 }
 
