@@ -92,14 +92,11 @@ searchButton.addEventListener("click", async e => {
     const value = searchInput.value.toLowerCase();
     if (value === "") {
         results = await fetchResult("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc", "results");
-        for (let result of results) {
-            addCard(result);
-        }
     } else {
         results = await fetchResult(`https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`, "results");
-        for (let result of results) {
-            addCard(result);
-        }
+    }
+    for (let result of results) {
+        addCard(result);
     }
 });
 
@@ -131,3 +128,42 @@ ratingFilter.addEventListener("change", e => {
     filtered(genreFilterValue, ratingFilterValue, resultsValue);
 });
 
+const sortFilter = document.querySelector("#sort");
+
+sortFilter.addEventListener("change", e => {
+    const sortValue = e.target.value.toLowerCase();
+    if (sortValue === "rating") {
+        const items = Array.from(resultsValue);
+        items.sort((a, b) => {
+            const textA = a.children[0].children[1].textContent.slice(2);
+            const textB = b.children[0].children[1].textContent.slice(2);
+            return Number(textB) - Number(textA);
+        });
+        items.forEach(item => movieGrid.appendChild(item));
+    } else if (sortValue === "year") {
+        const items = Array.from(resultsValue);
+        const yearRegex = /\b(19|20)\d{2}\b/;
+        items.sort((a, b) => {
+            const textA = a.children[1].children[0].textContent.slice(0, 4);
+            const textB = b.children[1].children[0].textContent.slice(0, 4);
+            
+            const isYearA = yearRegex.test(textA);
+            const isYearB = yearRegex.test(textB);
+            
+            if (!isYearA && !isYearB) return 0;
+            if (!isYearA) return 1;
+            if (!isYearB) return -1;
+
+            return Number(textB) - Number(textA);
+        });
+        items.forEach(item => movieGrid.appendChild(item));
+    } else {
+        const items = Array.from(resultsValue);
+        items.sort((a, b) => {
+            const textA = a.children[1].children[1].textContent.toLowerCase();
+            const textB = b.children[1].children[1].textContent.toLowerCase();
+            return textA.localeCompare(textB);
+        });
+        items.forEach(item => movieGrid.appendChild(item));
+    }
+});
