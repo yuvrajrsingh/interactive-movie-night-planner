@@ -1,20 +1,14 @@
-const options = {
-    method: 'GET',
-    headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NDkwZGVjYzQyMjRjYjdhYmZkYjFiZTk1YjA5NTI3NiIsIm5iZiI6MTc4NjcwNzUyMS4yMDg5OTk5LCJzdWIiOiI2YTdlZmU0MWIxMGQwYmQwOThiZjhlNzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.WYUsJ-DJ2sgsskW4FdFZ_gIvCpPYIzHzx9VG-VmuXMg'
-    }
-};
-
 const movieGrid = document.querySelector("#movie-grid");
 const loading = document.querySelector("#loading");
 
 async function fetchResult(url, str) {
-    const response = await fetch(url, options);
+    const tmdbPath = new URL(url).pathname + new URL(url).search;
+    const response = await fetch(
+        `https://movie-api.anyuvrajsingh.workers.dev${tmdbPath}`
+    );
     const body = await response.json();
     if (str === "results") {
-        const { results } = body;
-        return results;
+        return body.results;
     } else if (str === "genres") {
         return body.genres;
     } else {
@@ -142,3 +136,4 @@ ratingFilter.addEventListener("change", e => {
     ratingFilterValue = e.target.value;
     filtered(genreFilterValue, ratingFilterValue, resultsValue);
 });
+
