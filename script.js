@@ -1,8 +1,8 @@
 const movieGrid = document.querySelector("#movie-grid");
-const loading = document.querySelector("#loading");
 let watchedList = JSON.parse(localStorage.getItem("watched")) || [];
-const count = document.querySelector("#movie-count");
 let watchlistMovies = JSON.parse(localStorage.getItem("watchlistMovies")) || [];
+const loading = document.querySelector("#loading");
+const count = document.querySelector("#movie-count");
 const watchlistCount = document.querySelector("#watchlist-count");
 watchlistCount.textContent = watchlistMovies.length;
 let currentModalMovie = null;
@@ -25,18 +25,26 @@ const modalGenres = document.querySelector("#modal-genres");
 const modalDescription = document.querySelector("#modal-description");
 
 async function fetchResult(url, str) {
-    const tmdbPath = new URL(url).pathname + new URL(url).search;
-    const response = await fetch(
-        `https://movie-api.anyuvrajsingh.workers.dev${tmdbPath}`
-    );
-    const body = await response.json();
-    if (str === "results") {
-        return body.results;
-    } else if (str === "genres") {
-        return body.genres;
-    } else {
-        return body.runtime;
+    try {
+        const tmdbPath = new URL(url).pathname + new URL(url).search;
+        const response = await fetch(
+            `https://movie-api.anyuvrajsingh.workers.dev${tmdbPath}`
+        );
+        const body = await response.json();
+        if (str === "results") {
+            return body.results;
+        } else if (str === "genres") {
+            return body.genres;
+        } else {
+            return body.runtime;
+        }
+        document.querySelector("#error").classList.add("hidden");
+    } catch (error) {
+        loading.style.display = "none";
+        document.querySelector("#error").classList.remove("hidden");
+        count.textContent = 0;
     }
+    
 }
 
 const genres = await fetchResult("https://api.themoviedb.org/3/genre/movie/list", "genres");
@@ -183,17 +191,25 @@ function filtered(gFilter, rFilter, wFilter, rValues) {
 }
 
 movieGrid.textContent = "";
-
+document.querySelector("#empty").classList.add("hidden");
 for (let result of results) {
     addCard(result);
 }
 
+let searchValue;
+
 searchButton.addEventListener("click", async e => {
-    const value = searchInput.value.toLowerCase();
-    if (value === "") {
+    searchValue = searchInput.value.toLowerCase();
+    if (searchValue === "") {
         results = await fetchResult("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc", "results");
+        document.querySelector("#empty").classList.add("hidden");
     } else {
-        results = await fetchResult(`https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`, "results");
+        results = await fetchResult(`https://api.themoviedb.org/3/search/movie?query=${searchValue}&include_adult=false&language=en-US&page=1`, "results");
+        document.querySelector("#empty").classList.add("hidden");
+        if (results.length === 0) {
+            document.querySelector("#empty").classList.remove("hidden");
+            count.textContent = 0;
+        }
     }
     movieGrid.textContent = "";
     for (let result of results) {
@@ -325,4 +341,24 @@ modalWatchlist.addEventListener("click", () => {
             watchlistButton.textContent = "♡";
         }
     }
+});
+
+document.querySelector("#retry").addEventListener("click", async () => {
+    loading.style.display = "";
+    searchValue = searchInput.value.toLowerCase();
+    if (searchValueValue === "") {
+        results = await fetchResult("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc", "results");
+        document.querySelector("#empty").classList.add("hidden");
+    } else {
+        results = await fetchResult(`https://api.themoviedb.org/3/search/movie?query=${searchValue}&include_adult=false&language=en-US&page=1`, "results");
+        document.querySelector("#empty").classList.add("hidden");
+        if (results.length === 0) {
+            document.querySelector("#empty").classList.remove("hidden");
+        }
+    }
+    movieGrid.textContent = "";
+    for (let result of results) {
+        addCard(result);
+    }
+    loading.style.display = "none";
 });
