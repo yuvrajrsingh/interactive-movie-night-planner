@@ -83,12 +83,10 @@ async function addCard(result) {
             button1.classList.add("active");
             button1.textContent = "♥";
         }
-
         localStorage.setItem("watchlistMovies", JSON.stringify(watchlistMovies));
-
         watchlistCount.textContent = watchlistMovies.length;
     });
-    const button3 = document.createElement("span");
+    const button3 = document.createElement("button");
     button3.classList.add("watched-btn");
     button3.setAttribute("aria-label", "Mark as watched");
     button3.textContent = "✓";
