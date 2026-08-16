@@ -186,6 +186,11 @@ function filtered(gFilter, rFilter, wFilter, rValues) {
     count.textContent = Array.from(rValues).filter(rValue => {
         return window.getComputedStyle(rValue).display !== "none";
     }).length;
+    if (count.textContent === "0") {
+        document.querySelector("#empty").classList.remove("hidden");
+    } else {
+        document.querySelector("#empty").classList.add("hidden");
+    }
 }
 
 movieGrid.textContent = "";
